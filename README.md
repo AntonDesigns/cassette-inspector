@@ -4,8 +4,7 @@ AI-powered semiconductor cassette inspection system built with PyTorch, FastAPI,
 
 Designed for use with Trymax UV and 2000 series wafer handling robots. A live camera feed is analysed in real time by a two-stage neural network that detects the cassette, classifies each of the 25 slots as occupied or empty, and flags mismatches against the robot mapper — all with visual explanations via Grad-CAM heatmaps.
 
-![Demo screenshot](docs/screenshots/dashboard.png)
-
+![Demo screenshot](casetteai/docs/screenshots/dashboard.png)
 ---
 
 ## What it does
