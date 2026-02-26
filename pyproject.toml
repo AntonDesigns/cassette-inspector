@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "cassetteai"
@@ -9,10 +9,20 @@ description = "AI-powered semiconductor cassette inspection system"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+
 authors = [
     { name = "Max-Anton", email = "maxantonhorvat@outlook.com" }
 ]
-keywords = ["computer-vision", "pytorch", "yolo", "semiconductor", "inspection", "fastapi"]
+
+keywords = [
+    "computer-vision",
+    "pytorch",
+    "yolo",
+    "semiconductor",
+    "inspection",
+    "fastapi"
+]
+
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -29,7 +39,7 @@ dependencies = [
     "opencv-python>=4.9.0",
     "numpy>=1.26.0",
     "Pillow>=10.0.0",
-    "grad-cam>=1.5.0",
+    "grad-cam>=1.5.0"
 ]
 
 [project.scripts]
@@ -44,4 +54,7 @@ where = ["."]
 include = ["cassetteai*"]
 
 [tool.setuptools.package-data]
-cassetteai = ["frontend/templates/*.html", "frontend/static/**/*"]
+cassetteai = [
+    "frontend/templates/*.html",
+    "frontend/static/**/*"
+]

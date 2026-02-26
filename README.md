@@ -1,48 +1,54 @@
 # Cassette Inspector
 
-AI-powered semiconductor cassette inspection system built with PyTorch, FastAPI, and Grad-CAM.
+I built **Cassette Inspector** as an AI-powered cassette inspection
+system for semiconductor wafer handling. It processes a live camera feed
+through a two-stage computer vision pipeline and exposes the results
+through a FastAPI backend with Grad-CAM explanations.
 
-Designed for use with Trymax UV and 2000 series wafer handling robots. A live camera feed is analysed in real time by a two-stage neural network that detects the cassette, classifies each of the 25 slots as occupied or empty, and flags mismatches against the robot mapper — all with visual explanations via Grad-CAM heatmaps.
+The system is designed to integrate with Trymax UV and 2000 series wafer
+handling robots. In real time, it detects the cassette, classifies each
+of the 25 slots as occupied or empty, and flags mismatches against the
+robot mapper --- with visual heatmaps so engineers can clearly see why a
+decision was made.
 
-![Demo screenshot](casetteai/docs/screenshots/dashboard.png)
----
+![Demo screenshot](docs/screenshots/dashboard.png)
 
 ## What it does
 
-- Detects cassettes in a live camera feed using a fine-tuned YOLO26m model
-- Classifies all 25 slots per cassette (occupied / empty) using a MobileNetV3 slot classifier
-- Compares AI predictions against the Trymax mapper result and highlights mismatches
-- Generates Grad-CAM heatmaps so engineers can see exactly why the model made each decision
-- Exposes a REST API so Trymax NEO software can call it directly
-- Runs fully in-browser, no installation required for end users
-
----
+-   Detects cassettes in a live camera feed using a fine-tuned YOLO26m
+    model\
+-   Classifies all 25 slots per cassette (occupied / empty)\
+-   Compares AI predictions against the Trymax mapper result and
+    highlights mismatches\
+-   Generates Grad-CAM heatmaps for transparent, debuggable predictions\
+-   Exposes a REST API for direct integration with Trymax NEO\
+-   Runs in the browser (frontend served by FastAPI)
 
 ## Architecture
 
-```
-Camera → FastAPI backend → Cassette detector (YOLO26m)
-                        → Slot classifier (YOLO26n-cls)
-                        → Grad-CAM explainer
-                        → REST API  (/predict, /explain, /snapshot, /status)
-                        → Frontend (HTML/CSS/JS served by FastAPI)
-```
+Camera → FastAPI backend → Cassette detector (YOLO26m)\
+→ Slot classifier (YOLO26n-cls)\
+→ Grad-CAM explainer\
+→ REST API (/api/predict, /api/explain, /api/snapshot, /api/status,
+/api/confirm)\
+→ Frontend (HTML/CSS/JS served by FastAPI)
 
-The system follows a two-stage pipeline. The cassette detector first locates and crops the cassette from the full image. The slot classifier then runs on that crop only, which prevents false detections from background noise.
-
----
+I use a two-stage pipeline intentionally. The cassette detector first
+locates and crops the cassette from the full frame. The slot classifier
+then runs only on that cropped region, which significantly reduces
+background noise and improves classification reliability.
 
 ## Getting started
 
 ### Requirements
 
-- Python 3.10 or higher
-- CUDA-capable GPU recommended (runs on CPU but slowly)
-- A webcam or IP camera
+-   Python 3.10 or higher\
+-   CUDA-capable GPU recommended (CPU works but slower)\
+-   Webcam or IP camera
 
 ### Install
 
-```bash
+``` bash
 git clone https://github.com/AntonDesigns/cassette-inspector.git
 cd cassette-inspector
 pip install -e .
@@ -52,41 +58,37 @@ pip install -e .
 
 Place your trained weights in the `models/` folder:
 
-```
-models/
-  cassette_detector/
-    best.pt       ← based off YOLO26m cassette detector
-  slot_classifier/
-    best.pt       ← based off YOLO26n-cls slot classifier
-```
+models/\
+cassette_detector/\
+best.pt\
+slot_classifier/\
+best.pt
 
-Model weights are not included in this repository. See [Training](#training) if you want to train your own, or contact the author for pre-trained weights.
+Model weights are not included in this repository.
 
 ### Run
 
-```bash
+``` bash
 cassetteai serve
 ```
 
-Then open `http://localhost:8000` in your browser.
+Then open:
 
----
+http://localhost:8000
 
 ## API
 
-The FastAPI backend exposes the following endpoints:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/predict` | Run full inference on an image |
-| POST | `/api/explain` | Generate Grad-CAM heatmap |
-| POST | `/api/snapshot` | Capture and return a camera frame |
-| GET | `/api/status` | Model and camera status |
-| POST | `/api/confirm` | Engineer confirms or overrides a prediction |
+  Method   Endpoint        Description
+  -------- --------------- ---------------------------------------------
+  POST     /api/predict    Run full inference on an image
+  POST     /api/explain    Generate Grad-CAM heatmap
+  POST     /api/snapshot   Capture and return a camera frame
+  GET      /api/status     Model and camera status
+  POST     /api/confirm    Engineer confirms or overrides a prediction
 
 Example response from `/api/predict`:
 
-```json
+``` json
 {
   "slots": [1, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
   "confidence": [0.97, 0.95, 0.98, 0.96, 0.94, 0.95, 0.97, 0.98, 0.96, 0.95,
@@ -96,42 +98,43 @@ Example response from `/api/predict`:
 }
 ```
 
----
-
 ## Training
 
-Training notebooks and data pipeline live in a separate private repository. This repo contains only the application layer. If you want to train your own models:
+The training notebooks and data pipeline live in a separate private
+repository. This repository contains the runtime application layer.
 
-1. Collect cassette images and label them using LabelImg (YOLO format for the detector, binary slot labels for the classifier)
-2. Train the cassette detector using YOLO26m fine-tuning
-3. Train the slot classifier using MobileNetV3 with transfer learning
-4. Place the resulting `best.pt` files in `models/cassette_detector/` and `models/slot_classifier/`
+If you want to train your own models:
 
----
+1.  Collect and label cassette images (YOLO format for detection, slot
+    labels for classification)\
+2.  Fine-tune the cassette detector (YOLO26m)\
+3.  Train the slot classifier (YOLO26n-cls or MobileNet-based approach)\
+4.  Place the resulting `best.pt` files in the correct `models/`
+    subfolders
 
 ## Project context
 
-This application was built as part of a 20-week internship at Trymax Semiconductor Equipment B.V. The goal is to replace manual cassette inspection with a real-time AI system that integrates with existing robot software.
+I developed this during a 20-week internship at Trymax Semiconductor
+Equipment B.V. The objective was to replace manual cassette inspection
+with a real-time AI system that integrates directly with existing robot
+software.
 
-The project is structured in three stages:
+The project evolved in three stages:
 
-- Stage 1: Cassette detector (locate and crop the cassette from a full image)
-- Stage 2: Slot classifier (classify each of the 25 slots as occupied or empty)
-- Stage 3: Anomaly detection (double-slotted wafers, cross-sided inserts, tilted wafers)
-
----
+-   Stage 1: Cassette detection\
+-   Stage 2: Slot classification\
+-   Stage 3: Anomaly detection (double-slotting, cross-sided inserts,
+    tilted wafers)
 
 ## Tech stack
 
-- PyTorch + Ultralytics YOLO26 for object detection
-- YOLO26n-CLS for slot classification
-- Grad-CAM for explainability
-- FastAPI for the backend and API
-- OpenCV for camera handling
-- Plain HTML/CSS/JavaScript for the frontend (no framework dependency)
-- SQLite for inspection history
-
----
+-   PyTorch + Ultralytics YOLO26\
+-   YOLO26n-CLS\
+-   Grad-CAM\
+-   FastAPI + Uvicorn\
+-   OpenCV\
+-   HTML/CSS/JavaScript\
+-   SQLite
 
 ## License
 
