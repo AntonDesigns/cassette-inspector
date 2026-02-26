@@ -50,3 +50,6 @@ data/
 docs/screenshots/*
 !docs/screenshots/.gitkeep
 !docs/screenshots/dashboard.png
+casetteai/docs/screenshots/*
+!casetteai/docs/screenshots/.gitkeep
+!casetteai/docs/screenshots/dashboard.png
