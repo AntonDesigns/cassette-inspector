@@ -8,15 +8,14 @@ through a FastAPI backend with Grad-CAM explanations.
 The system is designed to integrate with Trymax UV and 2000 series wafer
 handling robots. In real time, it detects the cassette, classifies each
 of the 25 slots as occupied or empty, and flags mismatches against the
-robot mapper --- with visual heatmaps so engineers can clearly see why a
+robot mapper with visual heatmaps so engineers can clearly see why a
 decision was made.
 
 ![Demo screenshot](docs/screenshots/dashboard.png)
 
 ## What it does
 
--   Detects cassettes in a live camera feed using a fine-tuned YOLO26m
-    model\
+-   Detects cassettes in a live camera feed using a based off, YOLO26n-cls, improved throughout training (uses new data, rather the build off yolo26)
 -   Classifies all 25 slots per cassette (occupied / empty)\
 -   Compares AI predictions against the Trymax mapper result and
     highlights mismatches\
@@ -27,7 +26,7 @@ decision was made.
 ## Architecture
 
 Camera → FastAPI backend → Cassette detector (YOLO26m)\
-→ Slot classifier (YOLO26n-cls)\
+→ Slot classifier (based off, YOLO26n-cls, improved throughout training (uses new data, rather the build off yolo26))\
 → Grad-CAM explainer\
 → REST API (/api/predict, /api/explain, /api/snapshot, /api/status,
 /api/confirm)\
