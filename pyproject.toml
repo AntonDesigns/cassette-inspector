@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "cassetteai"
+version = "0.1.0"
+description = "AI-powered semiconductor cassette inspection system"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Max-Anton", email = "maxantonhorvat@outlook.com" }
+]
+keywords = ["computer-vision", "pytorch", "yolo", "semiconductor", "inspection", "fastapi"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "ultralytics>=8.2.0",
+    "opencv-python>=4.9.0",
+    "numpy>=1.26.0",
+    "Pillow>=10.0.0",
+    "grad-cam>=1.5.0",
+]
+
+[project.scripts]
+cassetteai = "cassetteai.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/AntonDesigns/cassette-inspector"
+Issues = "https://github.com/AntonDesigns/cassette-inspector/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cassetteai*"]
+
+[tool.setuptools.package-data]
+cassetteai = ["frontend/templates/*.html", "frontend/static/**/*"]
