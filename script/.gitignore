@@ -1,0 +1,52 @@
+# Model weights — never commit these
+models/**/*.pt
+models/**/*.pth
+models/**/*.onnx
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.installed.cfg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs and runtime data
+*.log
+*.db
+data/
+
+# Environment variables
+.env
+.env.local
+
+# Screenshots — keep folder, ignore images except the demo
+docs/screenshots/*
+!docs/screenshots/.gitkeep
+!docs/screenshots/dashboard.png
+cassetteai/docs/screenshots/*
+!cassetteai/docs/screenshots/.gitkeep
+!cassetteai/docs/screenshots/dashboard.png
