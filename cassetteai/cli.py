@@ -1,37 +1,21 @@
-"""
-cassetteai CLI entry point.
-Usage: cassetteai serve
-"""
-import argparse
-import sys
+import uvicorn
+from config import HOST, PORT
 
-
-def main():
-    parser = argparse.ArgumentParser(
-        prog="cassetteai",
-        description="Cassette Inspector — AI-powered semiconductor cassette inspection"
-    )
-    subparsers = parser.add_subparsers(dest="command")
-
-    serve_parser = subparsers.add_parser("serve", help="Start the web server")
-    serve_parser.add_argument("--host", default="0.0.0.0", help="Host to bind to (default: 0.0.0.0)")
-    serve_parser.add_argument("--port", type=int, default=8000, help="Port to listen on (default: 8000)")
-    serve_parser.add_argument("--reload", action="store_true", help="Enable auto-reload for development")
-
-    args = parser.parse_args()
-
-    if args.command == "serve":
-        import uvicorn
-        uvicorn.run(
-            "cassetteai.api.main:app",
-            host=args.host,
-            port=args.port,
-            reload=args.reload,
-        )
-    else:
-        parser.print_help()
-        sys.exit(1)
-
+# I am the command line entry point for the main app.
+# Instead of typing the full uvicorn command every time, I can just run:
+#
+#   py -3.11 cli.py
+#
+# This is equivalent to:
+#   uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+#
+# For production, drop the reload flag. It is only useful during development
+# because it restarts the server automatically when I change a file.
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(
+        "api.main:app",
+        host=HOST,
+        port=PORT,
+        reload=True,
+    )
