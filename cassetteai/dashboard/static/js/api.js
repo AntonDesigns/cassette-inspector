@@ -1,43 +1,40 @@
-// Every fetch() call lives here and nowhere else.
-// When a route changes in main.py, this is the only JS file that needs updating.
-
 var API = {
 
-  predict: async function (imageB64) {
-    var res = await fetch("/api/predict", {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ image_b64: imageB64 }),
-    });
-    return res.json();
-  },
+    snapshot: function() {
+        return fetch("/api/snapshot", { method: "POST" })
+            .then(function(r) { return r.json(); });
+    },
 
-  explain: async function (imageB64) {
-    var res = await fetch("/api/explain", {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ image_b64: imageB64 }),
-    });
-    return res.json();
-  },
+    predict: function(imageB64, machineType) {
+        return fetch("/api/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image_b64: imageB64, machine_type: machineType }),
+        }).then(function(r) { return r.json(); });
+    },
 
-  snapshot: async function () {
-    var res = await fetch("/api/snapshot", { method: "POST" });
-    return res.json();
-  },
+    explain: function(imageB64) {
+        return fetch("/api/explain", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image_b64: imageB64 }),
+        }).then(function(r) { return r.json(); });
+    },
 
-  confirm: async function (data) {
-    var res = await fetch("/api/confirm", {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(data),
-    });
-    return res.json();
-  },
+    confirm: function(inspectionId, slots, engineer) {
+        return fetch("/api/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                inspection_id: inspectionId,
+                slots: slots,
+                engineer: engineer,
+            }),
+        }).then(function(r) { return r.json(); });
+    },
 
-  status: async function () {
-    var res = await fetch("/api/status");
-    return res.json();
-  },
-
+    status: function() {
+        return fetch("/api/status")
+            .then(function(r) { return r.json(); });
+    },
 };
