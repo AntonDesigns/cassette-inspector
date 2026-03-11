@@ -4,6 +4,16 @@ from db.base import BaseDB
 from config import SQLITE_PATH
 
 # Level 1 SQLite implementation.
+# Nothing outside this file knows it is SQLite.
+# If I ever need to swap this out, only this file changes.
+#
+# I store the database at SQLITE_PATH from config.py.
+# No setup needed, SQLite creates the file automatically on first run.
+# This is fine for single-engineer use on a laptop.
+#
+# Column names match inspections.csv exactly:
+#   ai_slots stores ai_s01..ai_s25 as a JSON array
+#   ai_conf  stores ai_p01..ai_p25 as a JSON array
 
 
 class SQLiteDB(BaseDB):

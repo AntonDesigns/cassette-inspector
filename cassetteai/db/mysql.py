@@ -3,7 +3,15 @@ from db.base import BaseDB
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
 
 # Level 2 MySQL implementation.
-
+# Nothing outside this file knows it is MySQL.
+# This is a drop-in replacement for sqlite.py. The interface is identical.
+# To activate it I flip DB_BACKEND to "mysql" in config.py. Nothing else changes.
+#
+# Column names match inspections.csv exactly, same as sqlite.py.
+# The two implementations must always stay in sync with each other.
+#
+# I read credentials from environment variables set in config.py so they
+# are never hardcoded or committed to git.
 
 
 class MySQLDB(BaseDB):
