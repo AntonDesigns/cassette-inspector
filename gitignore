@@ -1,55 +1,46 @@
-# Model weights — never commit these
-models/cassette_detector/best.pt
-models/slot_classifier/best.pt
-models/**/*.pt
-models/**/*.pth
-models/**/*.onnx
+# I never commit model files. Place them manually after training.
+models/cassette_detector/
+models/slot_classifier/
 
-# Python
+# Database files are local to each machine.
+*.db
+*.sqlite
+
+# Python cache
 __pycache__/
 *.py[cod]
-*.pyd
 *.pyo
-.Python
-*.egg
-*.egg-info/
-dist/
-build/
-.eggs/
-.installed.cfg
-*.egg-info
+.pytest_cache/
 
-# Virtual environments
+# Virtual environment
 .venv/
 venv/
 env/
-ENV/
+
+# Environment variables and secrets
+.env
+*.env
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
 
 # IDE
-.idea/
 .vscode/
-*.swp
-*.swo
+.idea/
+*.suo
+*.user
+
+# OS
 .DS_Store
 Thumbs.db
 
-# Jupyter (in case notebooks are ever added here)
-.ipynb_checkpoints/
-*.ipynb
-
-# Logs and runtime data
+# Logs
 *.log
-inspections.csv
+08_logs/
+
+# Data folders are managed separately, not committed to git.
+# The data root is configured via CASSETTE_DATA_ROOT in config.py.
 data/
-
-# Environment variables
-.env
-.env.local
-
-# Screenshots placeholder — keep the folder, ignore actual images except the demo
-docs/screenshots/*
-!docs/screenshots/.gitkeep
-!docs/screenshots/dashboard.png
-casetteai/docs/screenshots/*
-!casetteai/docs/screenshots/.gitkeep
-!casetteai/docs/screenshots/dashboard.png
+outputs/

@@ -1,60 +1,53 @@
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "cassetteai"
-version = "0.1.0"
-description = "AI-powered semiconductor cassette inspection system"
-readme = "README.md"
-requires-python = ">=3.10"
-license = { text = "MIT" }
-
+version = "1.0.0"
+description = "AI-based wafer cassette inspection tool for Trymax Semiconductor"
 authors = [
-    { name = "Max-Anton", email = "maxantonhorvat@outlook.com" }
+    { name = "Anton Horvat" }
 ]
-
-keywords = [
-    "computer-vision",
-    "pytorch",
-    "yolo",
-    "semiconductor",
-    "inspection",
-    "fastapi"
-]
-
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
+requires-python = ">=3.11"
 
 dependencies = [
+    # Backend
     "fastapi>=0.110.0",
-    "uvicorn[standard]>=0.29.0",
-    "torch>=2.2.0",
+    "uvicorn>=0.29.0",
+    "python-multipart>=0.0.9",
+    "jinja2>=3.1.0",
+
+    # AI inference (PyTorch for v1 and v2)
+    # Install the correct torch version for your machine from https://pytorch.org
+    # For CPU only: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
     "torchvision>=0.17.0",
-    "ultralytics>=8.2.0",
+
+    # Grad-CAM
+    "grad-cam>=1.5.0",
+
+    # Camera
     "opencv-python>=4.9.0",
+
+    # Data
+    "pandas>=2.0.0",
     "numpy>=1.26.0",
-    "Pillow>=10.0.0",
-    "grad-cam>=1.5.0"
+
+    # Pydantic (used by FastAPI for request/response models)
+    "pydantic>=2.0.0",
 ]
 
-[project.scripts]
-cassetteai = "cassetteai.cli:main"
+[project.optional-dependencies]
+# Level 2 only. Install these when switching to MySQL.
+mysql = [
+    "mysql-connector-python>=8.3.0",
+]
 
-[project.urls]
-Homepage = "https://github.com/AntonDesigns/cassette-inspector"
-Issues = "https://github.com/AntonDesigns/cassette-inspector/issues"
+# ONNX runtime for v3 when the slot classifier moves to YOLO.
+onnx = [
+    "onnxruntime>=1.17.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends.legacy:build"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["cassetteai*"]
-
-[tool.setuptools.package-data]
-cassetteai = [
-    "frontend/templates/*.html",
-    "frontend/static/**/*"
-]
+include = ["api*", "core*", "db*", "dashboard*", "bridge*"]
