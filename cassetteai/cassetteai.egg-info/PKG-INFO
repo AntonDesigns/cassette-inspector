@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: cassetteai
+Version: 1.0.0
+Summary: AI-based wafer cassette inspection tool for Trymax Semiconductor
+Author: Anton Horvat
+Requires-Python: >=3.11
+Requires-Dist: fastapi>=0.110.0
+Requires-Dist: uvicorn>=0.29.0
+Requires-Dist: python-multipart>=0.0.9
+Requires-Dist: jinja2>=3.1.0
+Requires-Dist: torchvision>=0.17.0
+Requires-Dist: grad-cam>=1.5.0
+Requires-Dist: opencv-python>=4.9.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: pydantic>=2.0.0
+Provides-Extra: mysql
+Requires-Dist: mysql-connector-python>=8.3.0; extra == "mysql"
+Provides-Extra: onnx
+Requires-Dist: onnxruntime>=1.17.0; extra == "onnx"
