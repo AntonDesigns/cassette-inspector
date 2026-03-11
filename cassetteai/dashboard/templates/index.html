@@ -1,28 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CassetteAI | Trymax</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CassetteAI</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
 </head>
-<body>
-  <header></header>
-  <main id="mainGrid"></main>
-  <div class="toast" id="toast"></div>
-
-  <script src="/static/js/config.js"></script>
-  <script src="/static/js/state.js"></script>
-  <script src="/static/js/api.js"></script>
-  <script src="/static/js/ui/toast.js"></script>
-  <script src="/static/js/ui/camera.js"></script>
-  <script src="/static/js/ui/overlay.js"></script>
-  <script src="/static/js/ui/gradcam.js"></script>
-  <script src="/static/js/ui/comparison.js"></script>
-  <script src="/static/js/ui/history.js"></script>
-  <script src="/static/js/ui/theme.js"></script>
-  <script src="/static/js/actions/inspectActions.js"></script>
-  <script src="/static/js/actions/reviewActions.js"></script>
-  <script src="/static/js/main.js"></script>
+<body
+    data-logo-dark="/static/img/trymax-logo-dark.png"
+    data-logo-light="/static/img/trymax-logo-light.png"
+>
+    <header class="header">
+        <img class="logo" src="/static/img/trymax-logo-dark.png" alt="Trymax" />
+        <span class="app-title">CassetteAI</span>
+        <div class="header-right">
+            <span class="engineer-badge" id="engineer-name">Identifying...</span>
+            <button class="btn-icon" data-action="toggle-theme" title="Toggle theme">&#9680;</button>
+        </div>
+    </header>
+    <div class="engineer-select-screen" id="engineer-select-screen" style="display:none;">
+        <div class="engineer-select-box">
+            <p>This application could not identify you automatically. Please select your name.</p>
+            <select id="engineer-dropdown">
+                <option value="">Select your name...</option>
+                {% for engineer in engineers %}
+                <option value="{{ engineer.name }}">{{ engineer.name }} ({{ engineer.role }})</option>
+                {% endfor %}
+            </select>
+            <button class="btn-primary" data-action="confirm-engineer">Continue</button>
+        </div>
+    </div>
+    <main class="main-layout">
+        <section class="camera-section">
+            <div class="camera-panel">
+                <video id="camera-feed" autoplay playsinline></video>
+                <canvas id="overlay-canvas"></canvas>
+                <img id="gradcam-overlay" class="gradcam-overlay" style="display:none;" alt="Grad-CAM" />
+            </div>
+            <div class="camera-controls">
+                <button class="btn-primary" data-action="snapshot">Snapshot</button>
+                <button class="btn-secondary" data-action="toggle-gradcam">Grad-CAM</button>
+                <button class="btn-secondary" data-action="flag-review">Flag for Review</button>
+            </div>
+            <div class="machine-controls">
+                <label for="machine-type">Machine type:</label>
+                <select id="machine-type">
+                    <option value="uv">NEO UV</option>
+                    <option value="2000">NEO 2000</option>
+                </select>
+            </div>
+            <div class="status-bar">
+                <span class="status-item" id="model-status">Model: checking...</span>
+                <span class="status-item" id="camera-status">Camera: checking...</span>
+                <span class="status-item" id="inference-time"></span>
+            </div>
+        </section>
+        <section class="results-section">
+            <div class="panel" id="confidence-panel">
+                <h2 class="panel-title">Slot Predictions</h2>
+                <div class="slot-grid" id="slot-grid"></div>
+            </div>
+            <div class="panel" id="comparison-panel">
+                <h2 class="panel-title">AI vs Mapper</h2>
+                <div class="comparison-grids">
+                    <div class="comparison-col">
+                        <h3>AI</h3>
+                        <div class="slot-grid" id="ai-grid"></div>
+                    </div>
+                    <div class="comparison-col">
+                        <h3>Mapper</h3>
+                        <div class="slot-grid" id="mapper-grid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel" id="history-panel">
+                <h2 class="panel-title">Session History</h2>
+                <ul class="history-list" id="history-list"></ul>
+            </div>
+        </section>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/state.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/ui/toast.js"></script>
+    <script src="/static/js/ui/theme.js"></script>
+    <script src="/static/js/ui/camera.js"></script>
+    <script src="/static/js/ui/overlay.js"></script>
+    <script src="/static/js/ui/gradcam.js"></script>
+    <script src="/static/js/ui/comparison.js"></script>
+    <script src="/static/js/ui/history.js"></script>
+    <script src="/static/js/actions/inspectActions.js"></script>
+    <script src="/static/js/actions/reviewActions.js"></script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
